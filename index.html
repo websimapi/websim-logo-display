@@ -3,7 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Logo Display</title>
+    <title>SVG Logo</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Passion+One:wght@700&family=Roboto+Slab:wght@700&display=swap" rel="stylesheet">
     <style>
         body {
             background-color: black;
@@ -14,23 +17,114 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
+            overflow: hidden;
         }
         .logo-container {
-            max-width: 90vmin;
-            max-height: 90vmin;
+            width: 90vmin;
+            height: 90vmin;
+            max-width: 600px;
+            max-height: 600px;
+            position: relative;
         }
-        img {
-            max-width: 100%;
-            height: auto;
-            display: block;
+
+        #shader-canvas {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
         }
+
+        .logo-svg {
+            position: relative;
+            z-index: 1;
+            width: 100%;
+            height: 100%;
+        }
+
+        .logo-svg .interactive-group:hover .star {
+            filter: drop-shadow(0 0 10px #ffee58);
+            transition: filter 0.3s ease-in-out;
+        }
+        .logo-svg .interactive-group:hover .swoosh,
+        .logo-svg .interactive-group:hover .dots {
+             filter: drop-shadow(0 0 5px #ffee58);
+             transition: filter 0.3s ease-in-out;
+        }
+
     </style>
 </head>
 <body>
     <div class="logo-container">
-        <img src="logo.png" alt="Web Interactive McWeb-Swim Logo">
+        <canvas id="shader-canvas"></canvas>
+        <svg id="logo" class="logo-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+            <defs>
+                <filter id="glow">
+                    <feDropShadow dx="0" dy="0" stdDeviation="5" flood-color="#f57c00" />
+                </filter>
+                <filter id="bevel">
+                    <feConvolveMatrix order="3 3" kernelMatrix="2 0 0 0 1 0 0 0 -2" in="SourceGraphic" result="convolved"/>
+                    <feComposite in="convolved" in2="SourceGraphic" operator="in"/>
+                </filter>
+                <path id="text-arc" d="M 120, 250 A 130 130 0 0 1 380 250" fill="none" />
+
+                <!-- Pixel dots for swoosh trails -->
+                <symbol id="pixel-dots" viewBox="0 0 100 100">
+                    <circle cx="10" cy="85" r="3" />
+                    <circle cx="20" cy="95" r="2.5" />
+                    <circle cx="35" cy="98" r="2" />
+                    <circle cx="50" cy="95" r="3" />
+                    <circle cx="60" cy="88" r="2.5" />
+                    <circle cx="65" cy="98" r="1.5" />
+                    <circle cx="75" cy="92" r="2" />
+                </symbol>
+            </defs>
+
+            <!-- Scalloped Seal Shape -->
+            <g filter="url(#glow)">
+                <path d="M250,10 C150,10 100,60 75,100 S10,150 10,250 S60,400 100,425 S150,490 250,490 S400,440 425,400 S490,350 490,250 S440,60 400,75 S350,10 250,10Z" fill="#c62828" filter="url(#bevel)"/>
+            </g>
+
+            <!-- Top Text: WEB INTERACTIVE -->
+            <text font-family="'Passion One', sans-serif" font-size="48" fill="white" letter-spacing="2">
+                <textPath href="#text-arc" startOffset="50%" text-anchor="middle">
+                    WEB <tspan dy="-5" font-size="36">★</tspan> INTERACTIVE
+                </textPath>
+            </text>
+
+            <g class="interactive-group" style="cursor: pointer;">
+                <!-- Central Star -->
+                <path class="star" d="M250 185 L261.2 212.5 L290 212.5 L269.4 229.4 L278.5 257.5 L250 240.6 L221.5 257.5 L230.6 229.4 L210 212.5 L238.8 212.5 Z" fill="#ffeb3b"/>
+
+                <!-- Swooshes -->
+                <g fill="#ffeb3b">
+                    <!-- Left Swoosh -->
+                    <path class="swoosh" d="M 245 235 C 230 255, 210 280, 215 310 Q 220 300 235 290 C 230 270, 235 250, 245 235 Z" />
+                    <!-- Right Swoosh -->
+                    <path class="swoosh" d="M 255 235 C 270 255, 290 280, 285 310 Q 280 300 265 290 C 270 270, 265 250, 255 235 Z" />
+                </g>
+                <g class="dots" fill="#ffeb3b" opacity="0.8">
+                     <use href="#pixel-dots" x="140" y="215" width="100" height="100" />
+                     <use href="#pixel-dots" x="180" y="212" width="100" height="100" transform="scale(1, -1) translate(0, -600) scale(-1,1) translate(-500,0)" />
+                </g>
+            </g>
+
+            <!-- Bottom Text: McWeb-Swim -->
+            <text font-family="'Roboto Slab', serif" font-weight="700" font-size="52" fill="white" text-anchor="middle">
+                <tspan x="250" y="360">McWeb-</tspan>
+                <tspan x="250" y="420">Swim</tspan>
+            </text>
+
+        </svg>
     </div>
+    <script type="importmap">
+    {
+        "imports": {
+            "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"
+        }
+    }
+    </script>
+    <script type="module" src="main.js"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
-
