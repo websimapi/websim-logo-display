@@ -17,27 +17,15 @@
             margin: 0;
             padding: 20px;
             box-sizing: border-box;
-            overflow: hidden;
         }
         .logo-container {
             width: 90vmin;
             height: 90vmin;
             max-width: 600px;
             max-height: 600px;
-            position: relative;
-        }
-
-        #shader-canvas {
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
         }
 
         .logo-svg {
-            position: relative;
-            z-index: 1;
             width: 100%;
             height: 100%;
         }
@@ -56,7 +44,6 @@
 </head>
 <body>
     <div class="logo-container">
-        <canvas id="shader-canvas"></canvas>
         <svg id="logo" class="logo-svg" viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
             <defs>
                 <filter id="glow">
@@ -117,14 +104,6 @@
 
         </svg>
     </div>
-    <script type="importmap">
-    {
-        "imports": {
-            "three": "https://cdn.jsdelivr.net/npm/three@0.164.1/build/three.module.js"
-        }
-    }
-    </script>
-    <script type="module" src="main.js"></script>
 <script defer src="https://static.cloudflareinsights.com/beacon.min.js/v8c78df7c7c0f484497ecbca7046644da1771523124516" integrity="sha512-8DS7rgIrAmghBFwoOTujcf6D9rXvH8xm8JQ1Ja01h9QX8EzXldiszufYa4IFfKdLUKTTrnSFXLDkUEOTrZQ8Qg==" data-cf-beacon='{"version":"2024.11.0","token":"4c6229722a6346bc8eb5cb0e5eae5d41","server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
 </body>
 </html>
